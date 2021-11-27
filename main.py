@@ -5,7 +5,7 @@ from PIL import Image
 from color import Color
 from octree_quantizer import OctreeQuantizer
 
-filename = 'machupicchu'
+filename = 'misti'
 
 def main():
     image = Image.open(filename + '.png')
@@ -14,22 +14,22 @@ def main():
 
     octree = OctreeQuantizer()
 
-    # add colors to the octree
+    # agregar colores al octree
     for j in range(height):
         for i in range(width):
             octree.add_color(Color(*pixels[i, j]))
 
-    # 256 colors for 8 bits per pixel output image
-    palette = octree.make_palette(256)
+    # 256 colores para imagen de salida de 8 bits por píxel
+    palette = octree.make_palette(64)
 
-    # create palette for 256 color max and save to file
-    palette_image = Image.new('RGB', (16, 16))
+    # crear paleta para 256 colores como máximo y guardar en archivo
+    palette_image = Image.new('RGB', (8, 8))
     palette_pixels = palette_image.load()
     for i, color in enumerate(palette):
-        palette_pixels[i % 16, i / 16] = (int(color.red), int(color.green), int(color.blue))
+        palette_pixels[i % 8, i / 8] = (int(color.red), int(color.green), int(color.blue))
     palette_image.save(filename + '_palette.png')
 
-    # save output image
+    # guardar imagen de salida
     out_image = Image.new('RGB', (width, height))
     out_pixels = out_image.load()
     for j in range(height):

@@ -17,7 +17,7 @@ class OctreeNode(object):
         self.pixel_count = 0
         self.palette_index = 0
         self.children = [None for _ in range(8)]
-        # add node to current level
+        # agregar nodo al nivel actual
         if level < OctreeQuantizer.MAX_DEPTH - 1:
             parent.add_level_node(level, self)
 
@@ -78,7 +78,7 @@ class OctreeNode(object):
         if self.children[index]:
             return self.children[index].get_palette_index(color, level + 1)
         else:
-            # get palette index for a first found child node
+            # obtener el índice de paleta para un primer nodo hijo encontrado
             for i in range(8):
                 if self.children[i]:
                     return self.children[i].get_palette_index(color, level + 1)
@@ -154,7 +154,7 @@ class OctreeQuantizer(object):
         """
         Add `color` to the Octree
         """
-        # passes self value as `parent` to save nodes to levels dict
+        # pasa el valor propio como "padre" para guardar los nodos en los niveles dictados
         self.root.add_color(color, 0, self)
 
     def make_palette(self, color_count):
@@ -164,9 +164,9 @@ class OctreeQuantizer(object):
         palette = []
         palette_index = 0
         leaf_count = len(self.get_leaves())
-        # reduce nodes
-        # up to 8 leaves can be reduced here and the palette will have
-        # only 248 colors (in worst case) instead of expected 256 colors
+        # reduce nodos
+        # aquí se pueden reducir hasta 8 hojas y la paleta tendrá
+        # solo 248 colores (en el peor de los casos) en lugar de los 256 colores esperados
         for level in range(OctreeQuantizer.MAX_DEPTH - 1, -1, -1):
             if self.levels[level]:
                 for node in self.levels[level]:
@@ -176,7 +176,7 @@ class OctreeQuantizer(object):
                 if leaf_count <= color_count:
                     break
                 self.levels[level] = []
-        # build palette
+        # construcción de paleta
         for node in self.get_leaves():
             if palette_index >= color_count:
                 break
